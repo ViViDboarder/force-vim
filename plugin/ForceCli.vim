@@ -81,3 +81,43 @@ command! -nargs=? ForceTarget call ForceTarget(<f-args>) " Change deploy target
 " Set SF Compiler
 autocmd BufNewFile,BufRead *.cls,*.trigger,*.page,*.component compiler ForceCli
 
+" Run current buffer
+" function! ForceRunCurrentBuffer()
+"     let a=join(getline(1, '$'), "\\\n")
+"     let cmd=join(["force apex <<END_APEX", a, "END_APEX"], "\\\n")
+"     execute '!' . cmd
+" endfunction
+
+" Run current file
+" function! ForceRunCurrentFile()
+"     let anonapex=expand('%')
+"     botright new
+"     setlocal buftype=nofile bufhidden=wipe noswapfile nowrap filetype=apexlog
+"     silent execute '$read ! force apex ' . anonapex
+" endfunction
+
+" function! ForceExecAnon()
+"     let anonfile="~/.anon-apex"
+"     execute 'botright edit ' . anonfile
+"     setlocal filetype=apex makeprg="force apex"
+" endfunction
+
+function! ForceNewExecAnon()
+    botright new AnonApex
+    setlocal buftype=nofile bufhidden=wipe noswapfile filetype=apex
+endfunction
+
+" Run current file
+function! ForceExecScratchAnon()
+    " TODO: Check if buffer name is AnonApex
+    " If not AnonApex, get current or selected lines and write to anonfile
+    let anonfile="~/.anon-apex"
+    silent execute 'w ' . anonfile
+    " TODO: Test if log exists already
+    botright new AnonApexLog
+    setlocal buftype=nofile bufhidden=wipe noswapfile nowrap filetype=apexlog
+    silent execute '$read ! force apex ' . anonfile
+endfunction
+
+command! -nargs=0 ForceNewExecAnon call ForceNewExecAnon()
+command! -nargs=0 ForceExecScratchAnon call ForceExecScratchAnon()
