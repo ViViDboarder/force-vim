@@ -1,7 +1,14 @@
-
+" Config Variables {
 if !exists("g:force_dispatch_background")
     let g:force_dispatch_background = 0
 end
+
+if !exists("g:force_disable_airline")
+    let g:force_disable_airline = 0
+end
+" Config Variables }
+
+" Main Functions {
 
 function! ForceDeploy()
     let filePath = expand("%")
@@ -11,7 +18,7 @@ function! ForceDeploy()
 
 endfunction
 
-function! ForceDeployTest()
+function! ForceTest()
     let fileName = expand("%:t:r")
 
     let command = "force test \"" . fileName ."\""
@@ -27,9 +34,8 @@ endfunction
 "
 " endfunction
 
-function! ForceTarget(...)
+function! ForceActive(...)
     if a:0 > 0
-
         if a:1 == "?"
             let command = "force logins"
         else
@@ -45,6 +51,11 @@ function! ForceTarget(...)
         call ForceTryStart(command)
     end
 
+endfunction
+
+function! ForceLogin(...)
+    let command = "force login " . join(a:000, " ")
+    call ForceTryStart(command)
 endfunction
 
 " Try to run the command using vim-dispatch
@@ -76,10 +87,15 @@ endfunction
 command! -nargs=0 ForceDeploy call ForceDeploy()         " Deploy current file
 command! -nargs=0 ForceDeployTest call ForceDeployTest() " Deploy current file and run test
 "command! -nargs=0 ForceRetrieve call ForceRetrieve()     " Retrieve current file
+command! -nargs=? ForceLogin call ForceLogin(<f-args>)   " Retrieve current file
 command! -nargs=? ForceTarget call ForceTarget(<f-args>) " Change deploy target
+
+" Main Functions }
 
 " Set SF Compiler
 autocmd BufNewFile,BufRead *.cls,*.trigger,*.page,*.component compiler ForceCli
+
+" Execute Anonymous {
 
 " Run current buffer
 " function! ForceRunCurrentBuffer()
@@ -121,3 +137,27 @@ endfunction
 
 command! -nargs=0 ForceNewExecAnon call ForceNewExecAnon()
 command! -nargs=0 ForceExecScratchAnon call ForceExecScratchAnon()
+
+" Execute Anonymous }
+
+" Plugin Functions {
+
+function! ForceCli#TargetName()
+    " Returns the name of the current force.com target
+    return system('force-target 2> /dev/null')[:-2]
+endfunction
+
+function! ForceCli#AirlineFunction(...)
+    if &filetype == 'apex' || &filetype == 'visualforce'
+        let force_target = ForceCli#TargetName()
+        if force_target != ''
+            call airline#extensions#append_to_section('b', ' ☁' . force_target)
+        endif
+    endif
+endfunction
+
+if g:force_disable_airline != 1 && g:loaded_airline == 1
+    call airline#add_statusline_func('ForceCli#AirlineFunction')
+endif
+
+" Plugin Functions }
