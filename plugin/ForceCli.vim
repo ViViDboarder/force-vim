@@ -6,6 +6,10 @@ end
 if !exists("g:force_disable_airline")
     let g:force_disable_airline = 0
 end
+
+if !exists("g:force_status_line_func_added")
+    let g:force_status_line_func_added = 0
+end
 " Config Variables }
 
 " Main Functions {
@@ -156,8 +160,9 @@ function! ForceCli#AirlineFunction(...)
     endif
 endfunction
 
-if g:force_disable_airline != 1 && g:loaded_airline == 1
+if g:force_disable_airline != 1 && g:loaded_airline == 1 && g:force_status_line_func_added != 1
     call airline#add_statusline_func('ForceCli#AirlineFunction')
+    let g:force_status_line_func_added = 1
 endif
 
 " Plugin Functions }
