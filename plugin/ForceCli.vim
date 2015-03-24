@@ -3,13 +3,17 @@ if !exists("g:force_dispatch_background")
     let g:force_dispatch_background = 0
 end
 
+if !exists('g:loaded_airline')
+    let g:force_disable_airline = 1
+endif
+
 if !exists("g:force_disable_airline")
     let g:force_disable_airline = 0
-end
+endif
 
 if !exists("g:force_status_line_func_added")
     let g:force_status_line_func_added = 0
-end
+endif
 " Config Variables }
 
 " Main Functions {
