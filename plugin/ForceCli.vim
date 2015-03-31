@@ -89,7 +89,7 @@ function! ForceTryStart(...)
 endfunction
 
 command! -nargs=0 ForceDeploy call ForceDeploy()         " Deploy current file
-command! -nargs=0 ForceDeployTest call ForceDeployTest() " Deploy current file and run test
+command! -nargs=0 ForceTest call ForceTest() " Deploy current file and run test
 "command! -nargs=0 ForceRetrieve call ForceRetrieve()     " Retrieve current file
 command! -nargs=? ForceLogin call ForceLogin(<f-args>)   " Retrieve current file
 command! -nargs=? ForceTarget call ForceTarget(<f-args>) " Change deploy target
