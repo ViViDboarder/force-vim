@@ -70,7 +70,9 @@ function! ForceTryStart(...)
     if a:0 > 0
         let command = a:1
 
-        if exists(":Dispatch")
+        if exists(':Neomake')
+            let command = "NeomakeSh " . command
+        elseif exists(":Dispatch")
             " Determine foreground or background
             if g:force_dispatch_background == 1
                 let fgbg = "! "
