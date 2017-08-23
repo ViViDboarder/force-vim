@@ -21,7 +21,7 @@ endif
 function! ForceDeploy()
     let filePath = expand("%")
 
-    let command = "force push \"" . filePath . "\""
+    let command = "force push -f \"" . filePath . "\""
     call ForceTryStart(command)
 
 endfunction
@@ -170,5 +170,20 @@ if g:force_disable_airline != 1 && g:loaded_airline == 1 && g:force_status_line_
     call airline#add_statusline_func('ForceCli#AirlineFunction')
     let g:force_status_line_func_added = 1
 endif
+
+" Neomake support
+let g:neomake_apex_force_push_maker = {
+            \ 'exe': 'force',
+            \ 'args': ['push', '-f'],
+            \ 'errorformat': &errorformat,
+            \ }
+let g:neomake_apex_force_test_maker = {
+            \ 'exe': 'echo',
+            \ 'args': ['test', '%:t:r', '||'],
+            \ 'errorformat': &errorformat,
+            \ }
+let g:neomake_visualforce_force_push_maker = g:neomake_apex_force_push_maker
+let g:neomake_apex_enabled_makers = ['force_push']
+let g:neomake_visualforce_enabled_makers = ['force_push']
 
 " Plugin Functions }

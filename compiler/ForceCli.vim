@@ -13,4 +13,4 @@ if exists(":CompilerSet") != 2		" older Vim always used :setlocal
 endif
 
 set errorformat+=%*[\"]%f%*[\"]\\,\ line\ %l:\ %m
-CompilerSet makeprg=force\ push\ %
+CompilerSet makeprg=force\ push\ -f\ %
